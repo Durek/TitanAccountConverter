@@ -27,24 +27,30 @@
 
         add("{'indexes':[" + vbNewLine)
         For Each s As String In TextBox1.Lines
-            Dim data As String() = s.Split(New Char() {":"c})
+            If s.Length > 0 Then
+                Try
 
-            If i = 0 Then add("    {'accounts': [" + vbNewLine)
+                    Dim data As String() = s.Split(New Char() {":"c})
 
-            i += 1
-            ix += 1
+                    If i = 0 Then add("    {'accounts': [" + vbNewLine)
 
-            add("        {'username': '" + data(0) + "','password': '" + data(1) + "'}")
+                    i += 1
+                    ix += 1
 
-            If Not ix = TextBox1.Lines.Count And Not i = accountsInIndex Then add(",")
-            If i = accountsInIndex Then
-                add(vbNewLine + "    ]},")
-                i = 0
+                    add("        {'username': '" + data(0) + "','password': '" + data(1) + "'}")
+
+                    If Not ix = TextBox1.Lines.Count And Not i = accountsInIndex Then add(",")
+                    If i = accountsInIndex Then
+                        add(vbNewLine + "    ]},")
+                        i = 0
+                    End If
+                    If ix = TextBox1.Lines.Count And i = accountsInIndex Then add(",")
+
+                    add(vbNewLine)
+                Catch ex As Exception
+                    MessageBox.Show(ex.ToString)
+                End Try
             End If
-            If ix = TextBox1.Lines.Count And i = accountsInIndex Then add(",")
-
-            add(vbNewLine)
-
         Next
         If i = accountsInIndex Then add("]")
         add("    ]}" + vbNewLine)
